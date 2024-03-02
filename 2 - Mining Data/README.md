@@ -1,5 +1,7 @@
 # Working with NCBI
 
+- `phylo-2.Rmd` & `phylo-2.ipynb` - contains this whole pipeline done
+
 ## Part 1 - `Python`
 
 ```python
