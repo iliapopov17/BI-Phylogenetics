@@ -1,0 +1,80 @@
+---
+title: "Molecular Phylogenetics"
+output: html_document
+---
+## Homework №2 - Mining Data
+
+Done by Ilia Popov
+
+### Part III - R
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+0) First I log in so I don't get 'shadow-ban'
+
+```{r}
+library(reutils)
+options(reutils.email = "iljapopov17@gmail.com")
+```
+
+1) Search PubMed for articles on the query "Cyclophilin A AND Open reading frame AND Real-time PCR" and see the abstracts of first two articles in plain text format.
+
+```{r}
+ms <- esearch(db = "pubmed", term = "Cyclophilin A AND Open reading frame AND Real-time PCR")
+abstr <- efetch(ms, rettype = "abstract")
+abstr
+write(content(abstr), "abstracts.txt")
+```
+
+2) Find the ID of the organism "_Procambarus clarkii_" by name in the taxonomy database
+
+```{r}
+esearch(db = "taxonomy", term = "Procambarus clarkii")
+```
+
+3) Let's query the nucleotide sequence database for the gene name "cyclophilin", and then return a table with:
+- UID
+- Accession number
+- Sequence length
+
+I changed the command we used in the lecture because in the lecture we searched the protein sequence database, and I needed to find the UID of a nucleotide for the assignment
+
+```{r}
+crcnp <- esearch(db = "nucleotide", term = "cyclophilin AND Procambarus clarkii[orgn]") 
+su <- esummary(crcnp)
+cosu <- content(su, "parsed")
+as.data.frame(cosu[,c("Id", "Caption", "Slen")])
+```
+
+4) Let's give the protein sequence database a text query and then return the sequences in fasta format, which we write to a file
+
+```{r}
+s <- esearch(db = "protein", term = "cyclophilin AND Procambarus clarkii[orgn]") 
+f <- efetch(uid = s[1:10], db = "protein", rettype = "fasta", retmode = "text")
+write(content(f), "cyclophilin.fa")
+fastaf <- readLines("cyclophilin.fa")
+head(fastaf)
+```
+
+5) Download the protein corresponding to the known UID of the nucleotide
+
+```{r}
+lnk1 <- elink(uid = "429843488", dbFrom = "nucleotide", dbTo = "protein")
+protein <- efetch(lnk1, rettype = "fasta", retmode = "text")
+write(content(protein), "prot_from_nt.fa")
+read_protein <- readLines("prot_from_nt.fa")
+head(read_protein)
+```
+
+6) Finally, let's download all the sequences from working with PMID 19041262 and write them to the fasta file
+
+```{r}
+ms2 <- esearch(term = "Cyclophilin A AND Open reading frame AND Real-time PCR", db = "pubmed")
+lnk <- elink(ms2[2], dbFrom = "pubmed", dbTo = "nuccore")
+f2 <- efetch(lnk, rettype = "fasta", retmode = "text")
+write(content(f2), "py_fasta_pmid_R.fa")
+read_seq <- readLines("py_fasta_pmid_R.fa")
+head(read_seq)
+```
