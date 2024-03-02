@@ -1,5 +1,7 @@
 # Multiple sequence alignment
 
+- `phylo-3.ipynb` - contains this whole pipeline done with more steps and visualisation
+
 1) Commands to run 6 possible alignment algorithms (`clustalw`, `muscle`, `mafft`, `kalign`, `tcoffee`, `prank`) for 10 DNA sequences.
 
 ```bash
