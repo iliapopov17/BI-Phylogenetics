@@ -1,4 +1,7 @@
 # Preparing the alignment and building trees
+
+- `phylo-4.ipynb` - contains this whole pipeline done
+
 > For this work, we will use the alignment of [SUP35 gene](https://www.yeastgenome.org/locus/S000002579) obtained by `prank` considering codons
 ```bash
 prank -codon -d=SUP35_10seqs.fa -o=SUP35_aln -F
