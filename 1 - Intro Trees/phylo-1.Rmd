@@ -1,5 +1,5 @@
 ---
-title: "Часть 1 - R"
+title: "Part 1 - R"
 output:
   html_document:
     df_print: paged
