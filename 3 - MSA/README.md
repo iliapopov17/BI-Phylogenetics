@@ -1,8 +1,8 @@
 # Multiple sequence alignment
 
-- `phylo-3.ipynb` - contains this whole pipeline done with more steps and visualisation
+- `phylo-3.ipynb` - contains this whole pipeline done
 
-1) Commands to run 6 possible alignment algorithms (`clustalw`, `muscle`, `mafft`, `kalign`, `tcoffee`, `prank`) for 10 DNA sequences.
+### 1) Commands to run 6 possible alignment algorithms (`clustalw`, `muscle`, `mafft`, `kalign`, `tcoffee`, `prank`) for 10 DNA sequences.
 
 ```bash
 time clustalw -INFILE=data/<file_name>.fa -OUTPUT=FASTA -OUTFILE=10_DNA_seqs/<file_name>.clustalw.fa
@@ -13,7 +13,31 @@ time t_coffee -infile=data/<file_name>.fa -outfile=10_DNA_seqs/<file_name>_tcoff
 time prank -d=data/<file_name>.fa -o=10_DNA_seqs/<file_name>_prank.fa -codon
 ```
 
-2) Comparative table with running time and DNA alignment quality for the algorithms used above
+```python
+from Bio import AlignIO
+import os
+```
+
+```python
+folder_path = '10_DNA_seqs'
+alignment_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith('.fa')]
+
+for file in alignment_files:
+    alignment = AlignIO.read(file, 'fasta')
+    alignment_length = alignment.get_alignment_length()
+    print(f"Alignment length in file {file}: {alignment_length}")
+```
+
+```
+Alignment length in file 10_DNA_seqs/02_SUP35_10seqs_tcoffee.fa: 2210
+Alignment length in file 10_DNA_seqs/02_SUP35_10seqs_mafft.fa: 2166
+Alignment length in file 10_DNA_seqs/02_SUP35_10seqs.clustalw.fa: 2148
+Alignment length in file 10_DNA_seqs/02_SUP35_10seqs_kalign.fa: 2152
+Alignment length in file 10_DNA_seqs/02_SUP35_10seqs_muscle.fa: 2333
+```
+
+### 2) Comparative table with running time and DNA alignment quality for the algorithms used above
+> Which algorithm is better to use?
 
 |Tool|Time|Alignment length|
 |----|----|----------------|
@@ -24,8 +48,25 @@ time prank -d=data/<file_name>.fa -o=10_DNA_seqs/<file_name>_prank.fa -codon
 |t_coffee|20.869|2210|
 |prank|more than 10 minutes|NA|
 
+I think it's best to use `muscle` as it got the longest expressing length! (Of course alignment length is not the only quality metric, but I used this metric only in this study project.)
 
-3) Commands to run 6 possible alignments for 250 DNA sequences.
+### 3) What's wrong with the alignment of `SUP35_10seqs_strange_aln.fa` and how to fix it?
+
+Let's take a look at this alignment in UGENE
+
+SCREENSHOT
+
+It can be seen that the sequence `SUP35_Spar_A12_Liti_` is strange. Most likely it is a reverse, i.e. it is reverse complementary.
+
+Let's do a couple of youtz, youtz, youtz, youtz.
+
+SCREENSHOT
+
+SCREENSHOT
+
+It's beautiful!
+
+### 4) Commands to run 6 possible alignments for 250 DNA sequences.
 
 ```bash
 time clustalw -INFILE=data/<file_name>.fa -OUTPUT=FASTA -OUTFILE=250_DNA_seqs/<file_name>.clustalw.fa
@@ -36,7 +77,25 @@ time t_coffee -infile=data/<file_name>.fa -outfile=250_DNA_seqs/<file_name>_tcof
 time prank -d=data/<file_name>.fa -o=250_DNA_seqs/<file_name>_prank.fa -codon
 ```
 
-4) Comparative table with running time and DNA alignment quality for the algorithms used above
+```python
+folder_path = '250_DNA_seqs'
+alignment_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith('.fa')]
+
+for file in alignment_files:
+    alignment = AlignIO.read(file, 'fasta')
+    alignment_length = alignment.get_alignment_length()
+    print(f"Alignment length in file {file}: {alignment_length}")
+```
+
+```
+Alignment length in file 250_DNA_seqs/05_SUP35_250seqs.clustalw.fa: 2179
+Alignment length in file 250_DNA_seqs/05_SUP35_250seqs_mafft.fa: 2322
+Alignment length in file 250_DNA_seqs/05_SUP35_250seqs_muscle.fa: 2365
+Alignment length in file 250_DNA_seqs/05_SUP35_250seqs_kalign.fa: 2210
+```
+
+### 5) Comparative table with running time and DNA alignment quality for the algorithms used above
+> Has our choice of algorithm changed?
 
 |Tool|Time|Alignment length|
 |----|----|----------------|
@@ -47,7 +106,10 @@ time prank -d=data/<file_name>.fa -o=250_DNA_seqs/<file_name>_prank.fa -codon
 |t_coffee|more than 1 hour|NA|
 |prank|more than 1 hour|NA|
 
-4) How to get amino acid sequences (translate)?
+All my sympathies are on the side of `kalign` for the reason that it aligned 250 sequences in 8 seconds.
+But to be fair, `mafft` is not bad either. Its alignment is longer, and its working time is 42 seconds, not 30 or 48 minutes....
+
+### 6) How to get amino acid sequences (translate)?
 
 **Option 1 - `transeq`**
 
@@ -69,7 +131,7 @@ But if we know how long this junk should be and we need to predict proteins quic
 getorf -sequence data/<file_name>.fa -outseq data/<file_name>.g.faa -noreverse -minsize 500
 ```
 
-5) Commands to run 6 possible alignment variants for 10 protein sequences.
+### 7) Commands to run 6 possible alignment variants for 10 protein sequences.
 
 ```bash
 time clustalw -INFILE=data/<file_name>.g.faa -OUTFILE=10_protein_seqs/<file_name>.clustalw.faa -OUTPUT=FASTA -TYPE=protein
@@ -81,7 +143,28 @@ time t_coffee -infile=data/<file_name>.g.faa -outfile=10_protein_seqs/<file_name
 time prank -d=data/<file_name>.g.faa -o=10_protein_seqs/<file_name>_prank.faa
 ```
 
-6) Comparative table with running time of protein alignments
+```python
+folder_path = '10_protein_seqs'
+alignment_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith('.fa') | file.endswith('.faa') | file.endswith('.fas')]
+
+for file in alignment_files:
+    alignment = AlignIO.read(file, 'fasta')
+    alignment_length = alignment.get_alignment_length()
+    print(f"Alignment length in file {file}: {alignment_length}")
+```
+
+```
+Alignment length in file 10_protein_seqs/08_SUP35_250seqs_mafft.fa: 759
+Alignment length in file 10_protein_seqs/08_SUP35_10seqs_muscle.faa: 765
+Alignment length in file 10_protein_seqs/08_SUP35_10seqs_kalign.faa: 721
+Alignment length in file 10_protein_seqs/08_SUP35_10seqs_tcoffee.faa: 752
+Alignment length in file 10_protein_seqs/08_SUP35_10seqs.clustalw.faa: 719
+Alignment length in file 10_protein_seqs/08_SUP35_10seqs.clustalo.faa: 757
+Alignment length in file 10_protein_seqs/08_SUP35_10seqs_prank.faa.best.fas: 776
+```
+
+### 8) Comparative table with running time of protein alignments
+> What is the best algorithm to use?
 
 
 |Tool|Time|Alignment length|
@@ -94,9 +177,105 @@ time prank -d=data/<file_name>.g.faa -o=10_protein_seqs/<file_name>_prank.faa
 |t_coffee|2.697|752|
 |prank|4:50.84|776|
 
-7) How to add two more nucleotide sequences to an alignment of 250 nucleotide sequences, previously aligning them, with and `mafft`?
+This is where I like `muscle` the best. It worked for less than 1 second and its expressing length is quite respectable.
+
+### 9) How to add two more nucleotide sequences to an alignment of 250 nucleotide sequences, previously aligning them, with and `mafft`?
 
 ```bash
 mafft --auto data/<file_name>.fa > 252_DNA_seqs/<file_name>_mafft.fa
 mafft --add 252_DNA_seqs/<file_name>_mafft.fa 250_DNA_seqs/<file_name>_mafft.fa > 252_DNA_seqs/<file_name>_mafft.fa
+```
+
+### 10) Extract from NCBI using any variation of eutils all sequences for the query "Parapallasea 18S" (Parapallasea is a taxon and 18S is a gene) and save to the file fasta.
+> What goes wrong when aligning the sequences in the Parapallasea_18S.fa file and with what parameters can you get the correct answer?
+
+```bash
+esearch -db nucleotide -query "Parapallasea 18S" | efetch -format fasta >Parapallasea_18.fa
+```
+
+**Option 1 - `muscle`**
+
+```bash
+muscle -align Parapallasea_18.fa -output Parapallasea_18.fa.muscle.aln
+```
+
+`muscle` worked very well for me. At the lecture we discussed that:
+
+- 18S sequenced in chunks
+- One sequence is long - a complete gene
+- Three short sequences:
+  - In two cases, the beginning of the gene was sequenced
+  - In one case - the end of the gene
+- **The sequences overlap little, partially.**
+
+And at the lecture, muscle broke down slightly. `muscle' put the third sequence in an even layer, even though it should be at the end. He put a piece of it at the beginning, and a piece of it at the end, where it actually aligns.
+
+But I had muscle aligned it fine. The end of the gene went to the end, the beginning went to the beginning. See the screenshot below. Probably in the new version `muscle` has learnt to handle such sequences well. Nevertheless, I legitimate that with partially overlapping sequences it is better to try different algorithms, and `mafft` and `prank` were better than `muscle` at one time.
+
+SCREENSHOT
+
+The beginning of a gene
+
+SCREENSHOT
+
+The end of the gene
+
+**Option 2 - `mafft`**
+
+```bash
+mafft --auto Parapallasea_18.fa > Parapallasea_18.fa.mafft.aln
+```
+
+### 11) Commands for creating a blast database from a set of Ommatogammarus_flavus_transcriptome_assembly.fa sequences, and for searching this database for the protein sequence Acanthogammarus_victorii_COI.faa and recording the results in a table (tab-separated text).
+> Attention: the origin of the sequence is mitochondrial. What is important to consider when searching?
+Extract the sequence with the best match into a separate file.
+
+```bash
+makeblastdb -in data/Ommatogammarus_flavus_transcriptome_assembly.fa -dbtype nucl -parse_seqids
+```
+
+The gene is mitochondrial<br>
+Accordingly, the genetic code is different, and since here we are dealing with the communication between the protein query and the nucleotide base, it may matter. Not catastrophic here. But it is better to use the `-db_gencode 5` option, because this way the identity will be higher
+
+```bash
+tblastn -query data/Acanthogammarus_victorii_COI.faa -db data/Ommatogammarus_flavus_transcriptome_assembly.fa -outfmt 6 -db_gencode 5
+## fields: qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
+```
+
+```
+Acanthogammarus_victorii_COI	TRINITY_DN8878_c0_g1_i2	89.621	501	52	0	9	509	3	1505	0.0	781
+Acanthogammarus_victorii_COI	TRINITY_DN58613_c0_g1_i1	50.000	20	9	1	206	225	32	88	6.3	20.8
+```
+
+Percentage of identity is **89.621**! Yay!
+
+```bash
+blastdbcmd -db data/Ommatogammarus_flavus_transcriptome_assembly.fa -entry TRINITY_DN8878_c0_g1_i2 -out data/Ommatogammarus_flavus_COI.fa
+```
+
+```bash
+cat data/Ommatogammarus_flavus_COI.fa
+```
+
+```
+>TRINITY_DN8878_c0_g1_i2 len=1505
+CGACCAACCACAAAGATATTGGCACTCTTTATTTTATGCTAGGGCTCTGGTCTGGGTTAGTCGGAACCTCCATAAGACTT
+ATCCTCCGCTCAGAACTTAGTGCGCCGGGTAGCCTGATTGGTGATGATCAACTGTATAACGTAATGGTAACCTCCCATGC
+TTTTATTATAATTTTTTTTATAGTTATGCCTATCATAATTGGCGGGTTTGGTAACTGGCTGCTTCCTTTAATACTAGGTA
+GACCTGATATAGCCTTCCCTCGAATAAACAACATGAGCTTTTGACTACTACCTCCTTCCCTTACACTTCTTATATCTAGA
+AGCTTAGTAGAAAGAGGAGTCGGCACAGGTTGAACTGTCTACCCTCCTTTATCTGGGTCTACAGCCCATAGAGGTAGCGC
+TGTAGATTTGGCTATTTTCTCACTTCATTTAGCCGGAGCTTCCTCTATCTTAGGGGCTGTAAATTTTATTTCTACCGCCA
+TTAATATGCGAGCGCCTGGGATAAAATTAGACCAAATGCCTTTATTCGTCTGAGCTATTATTATTACTACCGTCCTCCTA
+GTCTTATCCCTACCAGTCCTAGCTGGGGCCATTACGATACTACTTACAGACCGTAACATAAATACCTCTTTTTTTGACCC
+TAGTGGGGGGGGTGACCCTATCCTATACCAACACTTATTTTGATTTTTTGGGCACCCAGAGGTGTATATTTTAATCCTGC
+CTGCATTTGGCATAATCTCTCATATTGTTAGACAGGAGTCCGGTAAAAAAGAAACATTTGGCCCCCTAGGGATAATTTAT
+GCTATATTAGCTATTGGGTTCCTCGGATTTATTGTGTGAGCCCATCATATGTTTACAGTCGGTATGGATGTAGATACCCG
+AGCCTATTTTACATCAGCTACAATAATTATTGCAGTCCCCACCGGCATCAAAGTATTTAGGTGACTAGGTACTCTACAAG
+GCGGAAAAATTAACTTTTCTCCAGCTCTAATTTGAAGACTAGGTTTTATTTTCCTTTTCTCTATTGGAGGTTTAACTGGA
+GTTATATTAGCTAACTCATCAATTGACATCGTACTACACGACACTTACTATGTAGTTGCCCACTTTCATTATGTTTTATC
+TATGGGGGCTGTTTTCGGTATTTTTGCGGGGTTTGCTTACTGGTTTCCACTATTTACAGGTATAACTATCAATCCTATCC
+TAGCTAAAATTCATTTTTACGTCATATTCATGGGAGTAAACTTAACTTTTTTCCCCCAACATTTCCTTGGTTTAACGGGC
+ATACCTCGGCGATACTCAGACTATCCTGACTTCTTCACAGCCTGAAATATTGTTTCCTCCTTAGGCTCTTATATCTCTGT
+TTTAGCTATAGTGATCTTTATTGCTATAATCATAGAAGCTTTTATCTCTAAGCGGTCCGCTTTATTTTCCTTAACCTTGT
+CGTCTGCTTTAGAGTGGTACCACTCATACCCGCCAGCCGACCATAGCTACAACGATACCCCTATT
 ```
