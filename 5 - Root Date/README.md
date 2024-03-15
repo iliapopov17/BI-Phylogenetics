@@ -255,6 +255,10 @@ Set parameters, and set `input` and `output`. Useful hint - output can be named 
 <img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.59.15.png" align='center', width="50%">
 </div>
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/felidae_atp8.tree.png" align='center', width="50%">
+</div>
+
 Fiddled with the parameters and got these results
 
 Well. The common ancestor of our smoky leopards is about 2.5 million years old.
