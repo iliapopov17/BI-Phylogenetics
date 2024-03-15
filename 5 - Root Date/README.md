@@ -1,5 +1,6 @@
 # Rooting and comparing trees; Dating
 - `phylo-5.ipynb` - contains this whole pipeline done. Due to a lot of screenshots in this notebook it cannot be displayed in GitHub. Please download it in case you want to look at it.
+- `scripts` - contains all `Python` and `R` scripts used in this pipeline
 
 > For this work, we will use a filtered alignment (this is the same one we got in the [Trees step](4%20-%20Trees))
 
@@ -38,7 +39,25 @@ iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_root_outgroup -
 ! Rscript draw_tree.R SUP35_TIM3_ufb_alrt_abayes_rooted.treefile SUP35_TIM3_ufb_alrt_abayes_rooted.png
 ```
 
-СКРИНЫ!!!!!!!!!!!!!!
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/SUP35_TIM3_ufb.png" align='center', width="50%">
+</div>
+SUP35_TIM3_ufb.png
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/SUP35_TIM3_ufb_midpoint.png" align='center', width="50%">
+</div>
+SUP35_TIM3_ufb_midpoint.png
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/SUP35_TIM3_root_outgroup.png" align='center', width="50%">
+</div>
+SUP35_TIM3_root_outgroup.png
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/SUP35_TIM3_ufb_alrt_abayes_rooted.png" align='center', width="50%">
+</div>
+SUP35_TIM3_ufb_alrt_abayes_rooted.png
 
 ##### **2.1.1) Comparison of trees**
 
@@ -80,7 +99,9 @@ Programs that read `Newick` format will not be able to read this tree. According
 figtree SUP35_TIM3_root_auto.rootstrap.nex
 ```
 
-СКРИН!!!!!!!!!!!
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-16%20at%2000.24.10.png" align='center', width="50%">
+</div>
 
 It can't say anything specific about where the tree splits. There's a 42.4% chance the root is either in one place or the other.
 
@@ -160,21 +181,39 @@ In foreign colleagues the tree was based on several genes, we take only 1 piece 
 
 `Beauti` is the GUI application. So I will just provide as many screenshots as possible.
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2021.59.15.png" align='center', width="50%">
+</div>
 
 When loading the file, we select that we have nucleotide sequences
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2021.59.21.png" align='center', width="50%">
+</div>
 
-Eberything is okay.
+Everything is okay.
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.01.40.png" align='center', width="50%">
+</div>
 
 In `Site model` select TN93 and empirical frequencies
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.02.46.png" align='center', width="50%">
+</div>
 
 In `Clock model` we choose 0.02. Why? Because we rely on the known data on the frequency of substitutions in mtDNA (approximately 2% per million years)
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.06.15.png" align='center', width="50%">
+</div>
 
-Eberything is okay.
+Everything is okay.
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.07.12.png" align='center', width="50%">
+</div>
 
 Save everything to `felidae_2percent.xml`.
 
@@ -186,9 +225,15 @@ beast felidae_2percent.xml
 
 `Tracer` is the GUI application. So I will just provide as many screenshots as possible.
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.37.25.png" align='center', width="50%">
+</div>
 
 All `ESS` scores are in perfect order.
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.38.23.png" align='center', width="50%">
+</div>
 
 The so-called "hairy caterpillar".
 
@@ -196,6 +241,9 @@ The so-called "hairy caterpillar".
 
 `TreeAnnotator` is the GUI application. So I will just provide as many screenshots as possible.
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.51.48.png" align='center', width="50%">
+</div>
 
 Set parameters, and set `input` and `output`. Useful hint - output can be named the same way, but not .trees, just .tree!
 
@@ -203,6 +251,9 @@ Set parameters, and set `input` and `output`. Useful hint - output can be named 
 
 `FigTree` is the GUI application. So I will just provide as many screenshots as possible.
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-07%20at%2022.59.15.png" align='center', width="50%">
+</div>
 
 Fiddled with the parameters and got these results
 
