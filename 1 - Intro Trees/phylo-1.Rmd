@@ -1,0 +1,99 @@
+---
+title: "Часть 1 - R"
+output:
+  html_document:
+    df_print: paged
+---
+
+### Load all libraries
+
+```{r, message=FALSE, warning=FALSE}
+library(ape)
+library(ggtree)
+```
+
+## Part 1.1 R::ape
+
+1- The code reads a tree (((A,B),(C,D)),E) from text; into a simpletree object
+
+```{r}
+simpletree <- read.tree(text = "(((A,B), (C,D)), E);")
+```
+
+2- The code draws a simpletree using a standard function from the ape package
+
+```{r}
+plot.phylo(simpletree)
+```
+
+3- The code saves this tree in raster format (png) and vector format (svg)
+
+```{r, results='hide'}
+png("simpletree.png")
+plot.phylo(simpletree)
+dev.off()
+
+svg("simpletree.svg", width = 4, height = 4)
+plot.phylo(simpletree)
+dev.off()
+```
+
+4 - The code reads the file https://www.jasondavies.com/tree-of-life/life.txt into the treeoflife object
+
+```{r}
+treeoflife <- read.tree("https://www.jasondavies.com/tree-of-life/life.txt")
+```
+
+5 - The code draws treeoflife using a standard function from the ape package and saves this tree in png format
+
+```{r}
+plot.phylo(treeoflife, cex = 0.2)
+
+png(filename = "treeOfLife.png", width = 20, height = 20, units = "cm", res = 600)
+plot.phylo(treeoflife, cex = 0.2)
+dev.off()
+```
+
+6 - The code draws treeoflife unrooted
+
+```{r}
+plot.phylo(treeoflife, type = "unrooted", no.margin = T, cex = 0.2)
+```
+
+6.5 - The code draws treeoflife in a circular pattern
+
+```{r}
+plot.phylo(treeoflife, type = "radial", cex = 0.2)
+```
+
+## Part 1.2 R::ggtree
+
+7 - The code draws treeoflife using ggtree with minimal settings;
+
+```{r}
+treeoflife_text <- readLines("https://www.jasondavies.com/tree-of-life/life.txt")
+treeoflife <- ggtree::read.tree(text = treeoflife_text)
+ggtree(treeoflife)
+```
+
+8 - The code draws treeoflife using ggtree so that the inscriptions are readable
+
+```{r}
+ggtree(treeoflife) + geom_tiplab(size = 1)
+```
+
+9 - The code draws treeoflife circular with readable inscriptions
+
+```{r}
+ggtree(treeoflife) + layout_circular() + geom_tiplab(size = 2)
+```
+
+10 - The code draws treeoflife with additional highlighting of the "Homo_sapiens" and "Pan_troglodytes" parts
+
+```{r}
+treeoflife <- groupOTU(treeoflife, c("Homo_sapiens", "Pan_troglodytes"))
+ggtree(treeoflife) + layout_circular() + 
+  geom_tiplab2(size = 2) + geom_tippoint(aes(alpha = group), col = "red") + 
+  scale_color_manual(values = c(0,1), aesthetics = "alpha") +
+  theme(legend.position = 'null')
+```
