@@ -54,15 +54,21 @@ I think it's best to use `muscle` as it got the longest expressing length! (Of c
 
 Let's take a look at this alignment in UGENE
 
-SCREENSHOT
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/3%20-%20MSA/imgs/1.png" align='center', width="50%">
+</div>
 
 It can be seen that the sequence `SUP35_Spar_A12_Liti_` is strange. Most likely it is a reverse, i.e. it is reverse complementary.
 
 Let's do a couple of youtz, youtz, youtz, youtz.
 
-SCREENSHOT
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/3%20-%20MSA/imgs/2.png" align='center', width="50%">
+</div>
 
-SCREENSHOT
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/3%20-%20MSA/imgs/3.png" align='center', width="50%">
+</div>
 
 It's beautiful!
 
@@ -212,13 +218,17 @@ And at the lecture, muscle broke down slightly. `muscle' put the third sequence 
 
 But I had muscle aligned it fine. The end of the gene went to the end, the beginning went to the beginning. See the screenshot below. Probably in the new version `muscle` has learnt to handle such sequences well. Nevertheless, I legitimate that with partially overlapping sequences it is better to try different algorithms, and `mafft` and `prank` were better than `muscle` at one time.
 
-SCREENSHOT
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/3%20-%20MSA/imgs/4.png" align='center', width="50%">
+</div>
 
 The beginning of a gene
 
-SCREENSHOT
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/3%20-%20MSA/imgs/5.png" align='center', width="50%">
+</div>
 
-The end of the gene
+The end of the gene<br>
 
 **Option 2 - `mafft`**
 
