@@ -7,6 +7,12 @@
 prank -codon -d=SUP35_10seqs.fa -o=SUP35_aln -F
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/4%20-%20Trees/imgs/tree_building_overview.png" align='center', width="50%">
+</div>
+
+_Tree building overview_
+
 ### 1) How to cut bad areas out of the alignment using `trimAl`?
 
 ```bash
@@ -19,11 +25,12 @@ trimal -in SUP35_aln_prank.best.fas -out SUP35_aln_prank.trim.fas -automated1
 modeltest-ng -i SUP35_aln_prank.trim.fas -o SUP35_trim_modeltest
 ```
 
-|    |Model|Score|Weight|
-|----|-----|-----|------|
-|BIC|TIM3+G4|18180.5614|0.3950|
-|AIC|TIM3+I+G4|18041.1550|0.5377|
-|AICc|TIM3+I+G4|18041.1550|0.5377|
+```
+                     Model         Score        Weight
+   BIC             TIM3+G4    18180.5614        0.3950
+   AIC           TIM3+I+G4    18041.1550        0.5377
+  AICc           TIM3+I+G4    18041.1550        0.5377
+```
 
 In total we see that the `TIM3+G4` is recognised as the best model!
 
@@ -36,7 +43,9 @@ First, let's check that our tree is being built at all
 raxml-ng --check --msa SUP35_aln_prank.trim.fas --model TIM3+G4 --prefix SUP35_raxml_test
 ```
 
-`Alignment can be successfully read by RAxML-NG.`
+```
+Alignment can be successfully read by RAxML-NG.
+````
 
 Great! Let's go!
 
@@ -50,6 +59,10 @@ raxml-ng --msa SUP35_aln_prank.trim.fas --model TIM3+G4 --prefix SUP35_raxml --t
 Rscript draw_tree.R SUP35_raxml.raxml.bestTree SUP35_raxml.png
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/4%20-%20Trees/imgs/SUP35_raxml.png" align='center', width="50%">
+</div>
+
 ### 5) Model selection in ModelFinder (IQ-TREE)
 > Which model of evolution was found to be the most appropriate for our alignment?
 
@@ -57,13 +70,13 @@ Rscript draw_tree.R SUP35_raxml.raxml.bestTree SUP35_raxml.png
 iqtree2 -m MFP -s SUP35_aln_prank.trim.fas --prefix SUP35_MF2
 head -42 SUP35_MF2.iqtree | tail -6
 ```
-```bash
-#Best-fit model according to BIC: TIM3+F+G4
+```
+Best-fit model according to BIC: TIM3+F+G4
 
-#List of models sorted by BIC scores: 
+List of models sorted by BIC scores: 
 
-#Model LogL AIC w-AIC AICc w-AICc BIC w-BIC
-#TIM3+F+G4 -8993.686 18035.372 + 0.0517 18035.972 + 0.0549 18170.092 + 0.737
+Model                  LogL         AIC      w-AIC        AICc     w-AICc         BIC      w-BIC
+TIM3+F+G4         -8993.686   18035.372 +   0.0517   18035.972 +   0.0549   18170.092 +    0.737
 ```
 
 We see that the model `TIM3+F+G4` is recognised as the best!
@@ -88,6 +101,10 @@ iqtree2 -m TIM3+F+G4 -s SUP35_aln_prank.trim.fas --prefix SUP35_iqtree
 Rscript draw_tree.R SUP35_iqtree.treefile SUP35_iqtree.png
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/4%20-%20Trees/imgs/SUP35_iqtree.png" align='center', width="50%">
+</div>
+
 The trees obtained with RAxML and IQTREE are fundamentally similar.<br>
 They have different views on how well the outer groups diverge, and they have different topologies.
 
@@ -97,18 +114,27 @@ They have different views on how well the outer groups diverge, and they have di
 ```bash
 iqtree2 -s SUP35_aln_prank.best.fas -pre SUP35_iqtree_unfilt
 grep "Log-likelihood" SUP35_iqtree_unfilt.iqtree
-#Log-likelihood of the tree: -9696.9044 (s.e. 160.3706)
+```
+
+```
+Log-likelihood of the tree: -9696.9044 (s.e. 160.3706)
 ```
 
 ```bash
 grep "Log-likelihood" SUP35_iqtree.iqtree
-#Log-likelihood of the tree: -8993.1633 (s.e. 149.1347)
+```
+
+```
+Log-likelihood of the tree: -8993.1633 (s.e. 149.1347)
 ```
 
 ```bash
 iqtree2 -s SUP35_aln_prank.best.fas -m JC -pre SUP35_iqtree_JC
 grep "Log-likelihood" SUP35_iqtree_JC.iqtree
-#Log-likelihood of the tree: -10482.7253 (s.e. 176.1729)
+```
+
+```
+Log-likelihood of the tree: -10482.7253 (s.e. 176.1729)
 ```
 
 |              |Unfilt|TIM3+F+G4|JC|
@@ -159,3 +185,10 @@ iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_B_alrt_abayes -
 ```bash
 Rscript draw_tree_max.R SUP35_TIM3_B_alrt_abayes.treefile SUP35_TIM3_B_alrt_abayes.png
 ```
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/4%20-%20Trees/imgs/SUP35_TIM3_B_alrt_abayes.png" align='center', width="50%">
+</div>
+
+All values ​​- `alrt`, `abayes` and `ufb` are positively correlated - that is, if the indicators are high, then they are all high, as a rule. But this is not proportional.
+In the tree above, the indicator values ​​are replaced with the symbols of the sun, yin-yang and asterisk for educational purposes. In real life they don’t use this, but giving bare numbers through a slash is also not comme il faut...
