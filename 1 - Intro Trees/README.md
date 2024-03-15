@@ -18,6 +18,10 @@ simpletree <- read.tree(text = "(((A,B), (C,D)), E);")
 plot.phylo(simpletree)
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/2.png" align='center', width="50%">
+</div>
+
 ### 3) Save this tree in raster format (png) and vector format (svg or pdf)
 
 ```r
@@ -45,6 +49,9 @@ png(filename = "treeOfLife.png", width = 20, height = 20, units = "cm", res = 60
 plot.phylo(treeoflife, cex = 0.2)
 dev.off()
 ```
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/5.png" align='center', width="50%">
+</div>
 
 ### 6) Draw `treeoflife` unrooted or circular
 
@@ -53,6 +60,14 @@ plot.phylo(treeoflife, type = "unrooted", no.margin = T, cex = 0.2)
 
 plot.phylo(treeoflife, type = "radial", cex = 0.2)
 ```
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/6.png" align='center', width="50%">
+</div>
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/6.5.png" align='center', width="50%">
+</div>
 
 ## Part 1.2 - `library(ggtree)`
 
@@ -65,17 +80,29 @@ treeoflife <- ggtree::read.tree(text = treeoflife_text)
 ggtree(treeoflife)
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/7.png" align='center', width="50%">
+</div>
+
 ### 8) Draw treeoflife with ggtree so that the inscriptions are readable
 
 ```r
 ggtree(treeoflife) + geom_tiplab(size = 1)
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/8.png" align='center', width="50%">
+</div>
+
 ### 9) Draw treeoflife in a circular shape with readable inscriptions.
 
 ```r
 ggtree(treeoflife) + layout_circular() + geom_tiplab(size = 2)
 ```
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/9.png" align='center', width="50%">
+</div>
    
 ### 10) Draw treeoflife with additional highlighting of some part of it.
 
@@ -86,6 +113,10 @@ ggtree(treeoflife) + layout_circular() +
   scale_color_manual(values = c(0,1), aesthetics = "alpha") +
   theme(legend.position = 'null')
 ```
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/10.png" align='center', width="50%">
+</div>
 
 ## Part 2 - `Python`
 
@@ -502,6 +533,10 @@ _|                   ||  | Staphylococcus_epidermidis
 Phylo.draw(tree1, do_show = False)
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/13.png" align='center', width="50%">
+</div>
+
 ### 14) Save the tree image in raster (png) and vector (svg/pdf) formats
 
 ```python
@@ -510,12 +545,20 @@ matplotlib.pyplot.savefig("py_tree1_phylo.png")
 matplotlib.pyplot.savefig("py_tree1_phylo.pdf")
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/14.png" align='center', width="50%">
+</div>
+
 ### 15) Draw the tree in a more or less readable form
 
 ```python
 matplotlib.rc('font', size=1) matplotlib.pyplot.figure(figsize=(24,12))
 Phylo.draw(tree1, do_show = False) matplotlib.pyplot.savefig("py_tree1_phylo_enhanced.png", dpi=600)
 ```
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/15.png" align='center', width="50%">
+</div>
 
 ## Part 2.2 - `Python: ETE (ETE3)`
 
@@ -531,12 +574,20 @@ simpletree = Tree("(((A,B), (C,D)), E);")
 simpletree.render("simpletree.png", w=183, units="mm") ;
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/17.png" align='center', width="50%">
+</div>
+
 ### 18) Read the tree https://www.jasondavies.com/tree-of-life/life.txt and draw this tree with default settings
 
 ```python
 raw_tree = requests.get('https://www.jasondavies.com/tree-of-life/life.txt').text tree2 = Tree(raw_tree, format=1)
 tree2.render("py_tree2_ete3.pdf") ;
 ```
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/18.png" align='center', width="50%">
+</div>
 
 ### 19) Draw this tree circular
 
@@ -547,6 +598,10 @@ circular_style.scale = 20
 tree2.render("py_tree2_ete3_circ.pdf", tree_style=circular_style) ;
 ```
 
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/19.png" align='center', width="50%">
+</div>
+
 ### 20) Draw this treeoflife with additional highlighting of some part of your choice
 
 ```python
@@ -555,3 +610,7 @@ nst1["bgcolor"] = "LightSteelBlue"
 n1 = tree2.get_common_ancestor("Homo_sapiens", "Danio_rerio") n1.set_style(nst1)
 tree2.render("py_tree2_ete3_vertebrates.png", tree_style=circular_style) ;
 ```
+
+<div style='justify-content: center'>
+<img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/1%20-%20Intro%20Trees/imgs/20.png" align='center', width="50%">
+</div>
