@@ -1,6 +1,7 @@
 # Preparing the alignment and building trees
 
 - `phylo-4.ipynb` - contains this whole pipeline done
+- scripts - contains all R scripts used in this pipeline
 
 > For this work, we will use the alignment of [SUP35 gene](https://www.yeastgenome.org/locus/S000002579) obtained by `prank` considering codons
 ```bash
