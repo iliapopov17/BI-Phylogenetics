@@ -1,8 +1,7 @@
 # Repository for Phylogenetics Course Guides in Bioinformatics Institute
 
-This repository for **Phylogenetics Course *Guides*** in *Bioinformatics Institute 2023-2024*
-
-It can be used as a helpful repository with all possible cheat-sheets for phylogenetic studies
+> This repository for **Phylogenetics Course *Guides*** in *Bioinformatics Institute 2023-2024*<br>
+> It can be used as a helpful repository with all possible cheat-sheets for phylogenetic studies
 
 ## Rooting and comparing trees & Dating
 
