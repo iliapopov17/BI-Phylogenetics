@@ -4,12 +4,16 @@
 
 ## Part 1 - `Python`
 
+**_Input_**
+
 ```python
 from Bio import Entrez
 Entrez.email = 'iljapopov17@gmail.com'
 ```
 
 ### 1) Find articles in PubMed for a query of interest to you and return abstracts of those articles in plain text format
+
+**_Input_**
 
 ```python
 handle = Entrez.esearch(db = "pubmed", term = "Cyclophilin A AND Open reading frame AND Real-time PCR")
@@ -18,6 +22,8 @@ print(record)
 mshandle = Entrez.efetch(db="pubmed", id=record["IdList"][0:2], rettype="abstract", retmode="text")
 print(mshandle.read())
 ```
+
+**_Output_**
 
 ```
 {'Count': '3', 'RetMax': '3', 'RetStart': '0', 'IdList': ['29097323', '19041262', '18819019'], 'TranslationSet': [{'From': 'Cyclophilin A', 'To': '"cyclophilin a"[MeSH Terms] OR "cyclophilin a"[All Fields]'}, {'From': 'Open reading frame', 'To': '"open reading frames"[MeSH Terms] OR ("open"[All Fields] AND "reading"[All Fields] AND "frames"[All Fields]) OR "open reading frames"[All Fields] OR ("open"[All Fields] AND "reading"[All Fields] AND "frame"[All Fields]) OR "open reading frame"[All Fields]'}, {'From': 'Real-time PCR', 'To': '"real-time polymerase chain reaction"[MeSH Terms] OR ("real-time"[All Fields] AND "polymerase"[All Fields] AND "chain"[All Fields] AND "reaction"[All Fields]) OR "real-time polymerase chain reaction"[All Fields] OR ("real"[All Fields] AND "time"[All Fields] AND "pcr"[All Fields]) OR "real time pcr"[All Fields]'}], 'QueryTranslation': '("cyclophilin a"[MeSH Terms] OR "cyclophilin a"[All Fields]) AND ("open reading frames"[MeSH Terms] OR ("open"[All Fields] AND "reading"[All Fields] AND "frames"[All Fields]) OR "open reading frames"[All Fields] OR ("open"[All Fields] AND "reading"[All Fields] AND "frame"[All Fields]) OR "open reading frame"[All Fields]) AND ("real time polymerase chain reaction"[MeSH Terms] OR ("real time"[All Fields] AND "polymerase"[All Fields] AND "chain"[All Fields] AND "reaction"[All Fields]) OR "real time polymerase chain reaction"[All Fields] OR ("real"[All Fields] AND "time"[All Fields] AND "pcr"[All Fields]) OR "real time pcr"[All Fields])'}
@@ -95,11 +101,15 @@ PMID: 19041262 [Indexed for MEDLINE]
 
 ### 2) Find organism ID by name in the taxonomy database
 
+**_Input_**
+
 ```python
 handle = Entrez.esearch(db = "taxonomy", term = "Procambarus clarkii") record = Entrez.read(handle)
 print(record)
 print(record['IdList'])
 ```
+
+**_Output_**
 
 ```
 {'Count': '1', 'RetMax': '1', 'RetStart': '0', 'IdList': ['6728'], 'TranslationSet': [], 'TranslationStack': [{'Term': 'Procambarus clarkii[All Names]', 'Field': 'All Names', 'Count': '1', 'Explode': 'N'}, 'GROUP'], 'QueryTranslation': 'Procambarus clarkii[All Names]'}
@@ -107,6 +117,8 @@ print(record['IdList'])
 ```
 
 ### 3) Query the nucleotide sequence database by gene name and return a table with UIDs
+
+**_Input_**
 
 ```python
 handle = Entrez.esearch(db="nucleotide", term="cyclophilin AND Procambarus clarkii[orgn]")
@@ -116,12 +128,16 @@ for rec in record["IdList"]:
         print(temphandle[0]['Id']+"\t"+temphandle[0]['Caption']+"\t"+str(int(temphandle[0]['Length'])))#+"\n")
 ```
 
+**_Output_**
+
 ```
 1940114972	MT601694	636
 429843488	JX878886	495
 ```
 
 ### 4) Give the nucleotide or protein sequence database a text query and then return the sequences in fasta format, which we write to a file
+
+**_Input_**
 
 ```python
 handle = Entrez.esearch(db="protein", term="cyclophilin AND Procambarus clarkii[orgn]")
@@ -136,11 +152,15 @@ with open("cyclophilin.fasta", "r") as fastaf:
     print(snippet)
 ```
 
+**_Output_**
+
 ```
 ['>QPM92673.1 cyclophilin [Procambarus clarkii]\n', 'MKALVAVVALLVIFSVFNRADGQAGESKGPKVTHKVFFDITIGGVPKGTVVIGLFGSTVPRTAQNFFELA\n', 'QKPVGEGYKGSVFHRVIKDFMIQGGDFTRGDGTGGRSIYGERFADENFKLKHFGAGWLSMANAGKDTNGS\n', 'QFFITTNKTTWLDGKHVVFGKVLAGMPIIREIEASATDGRDRPVAEVKIVDSRGEALSQPFESVAKEDAT\n', 'D\n']
 ```
 
 ### 5) Download the protein corresponding to the known nucleotide UID
+
+**_Input_**
 
 ```python
 lhandle = Entrez.elink(dbfrom="nucleotide", db="protein", id="429843488") 
@@ -154,11 +174,15 @@ with open("prot_from_nt.fasta", "r") as fastaf:
     print(snippet)
 ```
 
+**_Output_**
+
 ```
 ['>AGA16578.1 cyclophilin A [Procambarus clarkii]\n', 'MGNPQVFFDITANGKPLGRIVMELRADVVPKTAENFRALCTGEKGFGYKGSTFHRVIPNFMCQGGDFTAG\n', 'NGTGGKSIYGSKFADENFQLPHDGPGILSMANAGPNTNGSQFFLCTVRTNWLDGKHVVLGKVTEGMDVVR\n', 'QIEGYGKPSGETSAKIVVANCGQL\n', '\n']
 ```
 
 ### 6) Download all sequences from the PMID ... job and write them to a fasta file
+
+**_Input_**
 
 ```python
 lhandle = Entrez.elink(dbfrom="pubmed", db="nucleotide", id="19041262")
@@ -174,6 +198,8 @@ with open("py_fasta_pmid.fasta", "r") as fastaf:
     print(snippet)
 ```
 
+**_Output_**
+
 ```
 ['>EU164775.1 Penaeus monodon cyclophilin A mRNA, complete cds\n', 'CTCGTCCTCGGTTCCCGGCGATCCTCTGGAGATTGTTGCCGTAGATGGACTTGCGAGCAGACCTACACCA\n', 'ACTTAGCCACCATGGGCAACCCCAAAGTCTTTTTCGACATTACCGCTGACAACCAGCCCGTTGGCAGGAT\n', 'CGTCATGGAGCTCCGCGCCGACGTGGTCCCCAAGACCGCCGAGAACTTCCGGTCGCTGTGCACGGGCGAG\n', 'AAGGGCTTCGGCTACAAGGGTTCCTGCTTCCACCGCGTGATCCCCAACTTCATGTGTCAGGGAGGCGACT\n']
 ```
@@ -182,9 +208,13 @@ with open("py_fasta_pmid.fasta", "r") as fastaf:
 
 ### 1) Find articles in PubMed for a query of interest to you and return abstracts of those articles in plain text format
 
+**_Input_**
+
 ```bash
 esearch -email iljapopov17@gmail.com -db pubmed -query "Cyclophilin A AND Open reading frame AND Real-time PCR" | efetch -mode text -format abstract
 ```
+
+**_Output_**
 
 ```
 1. Fish Shellfish Immunol. 2018 Jan;72:383-388. doi: 10.1016/j.fsi.2017.10.053. 
@@ -298,9 +328,13 @@ PMID: 18819019 [Indexed for MEDLINE]
 
 ### 2) Find organism ID by name in the taxonomy database
 
+**_Input_**
+
 ```bash
 esearch -email iljapopov17@gmail.com -db taxonomy -query "Procambarus clarkii" | esummary | grep TaxId
 ```
+
+**_Output_**
 
 ```
     <TaxId>6728</TaxId>
@@ -309,9 +343,13 @@ esearch -email iljapopov17@gmail.com -db taxonomy -query "Procambarus clarkii" |
 
 ### 3) Query the nucleotide sequence database by gene name and return a table with UIDs
 
+**_Input_**
+
 ```bash
 esearch -email iljapopov17@gmail.com -db nucleotide -query "cyclophilin AND Procambarus clarkii[orgn]" | esummary -mode xml | xtract -pattern DocumentSummary -element Id Caption Slen
 ```
+
+**_Output_**
 
 ```
 1940114972	MT601694	636
@@ -320,10 +358,14 @@ esearch -email iljapopov17@gmail.com -db nucleotide -query "cyclophilin AND Proc
 
 ### 4) Give the nucleotide or protein sequence database a text query and then return the sequences in fasta format, which we write to a file
 
+**_Input_**
+
 ```bash
 esearch -email iljapopov17@gmail.com -db protein -query "cyclophilin AND Procambarus clarkii[orgn]" | efetch -format fasta -mode text >cyclophilin.fa
 head cyclophilin.fa
 ```
+
+**_Output_**
 
 ```
 >QPM92673.1 cyclophilin [Procambarus clarkii]
@@ -339,10 +381,14 @@ QIEGYGKPSGETSAKIVVANCGQL
 
 ### 5) Download the protein corresponding to the known nucleotide UID
 
+**_Input_**
+
 ```bash
 elink -id 429843488 -db nuccore -target protein | efetch -format fasta -mode text > prot_from_nt.fa
 head prot_from_nt.fa
 ```
+
+**_Output_**
 
 ```
 >AGA16578.1 cyclophilin A [Procambarus clarkii]
@@ -353,10 +399,14 @@ QIEGYGKPSGETSAKIVVANCGQL
 
 ### 6) Download all sequences from the PMID ... job and write them to a fasta file
 
+**_Input_**
+
 ```bash
 elink -db pubmed -target nucleotide -id 19041262 | efetch -format fasta -mode text > py_fasta_pmid.fa
 head py_fasta_pmid.fa
 ```
+
+**_Output_**
 
 ```
 >EU164775.1 Penaeus monodon cyclophilin A mRNA, complete cds
@@ -373,6 +423,8 @@ CTGCGGCCAGCTGTAAAGTTTCAGAACATTCCCCCTTAGCCGCCCACCCCTTTTTTTTTTGATGTAATTG
 
 ## Part 3 - `R`
 
+**_Input_**
+
 ```r
 library(reutils)
 options(reutils.email = "iljapopov17@gmail.com")
@@ -380,12 +432,16 @@ options(reutils.email = "iljapopov17@gmail.com")
 
 ### 1) Find articles in PubMed for a query of interest to you and return abstracts of those articles in plain text format
 
+**_Input_**
+
 ```r
 ms <- esearch(db = "pubmed", term = "Cyclophilin A AND Open reading frame AND Real-time PCR")
 abstr <- efetch(ms, rettype = "abstract")
 abstr
 write(content(abstr), "abstracts.txt")
 ```
+
+**_Output_**
 
 ```
 ## Object of class 'efetch'
@@ -409,9 +465,13 @@ write(content(abstr), "abstracts.txt")
 
 ### 2) Find organism ID by name in the taxonomy database
 
+**_Input_**
+
 ```r
 esearch(db = "taxonomy", term = "Procambarus clarkii")
 ```
+
+**_Output_**
 
 ```
 ## Object of class 'esearch'
@@ -421,12 +481,16 @@ esearch(db = "taxonomy", term = "Procambarus clarkii")
 
 ### 3) Query the nucleotide sequence database by gene name and return a table with UIDs
 
+**_Input_**
+
 ```r
 crcnp <- esearch(db = "nucleotide", term = "cyclophilin AND Procambarus clarkii[orgn]") 
 su <- esummary(crcnp)
 cosu <- content(su, "parsed")
 as.data.frame(cosu[,c("Id", "Caption", "Slen")])
 ```
+
+**_Output_**
 
 ```
 ## Id Caption Slen
@@ -436,6 +500,8 @@ as.data.frame(cosu[,c("Id", "Caption", "Slen")])
 
 ### 4) Give the nucleotide or protein sequence database a text query and then return the sequences in fasta format, which we write to a file
 
+**_Input_**
+
 ```r
 s <- esearch(db = "protein", term = "cyclophilin AND Procambarus clarkii[orgn]") 
 f <- efetch(uid = s[1:10], db = "protein", rettype = "fasta", retmode = "text")
@@ -443,6 +509,8 @@ write(content(f), "cyclophilin.fa")
 fastaf <- readLines("cyclophilin.fa")
 head(fastaf)
 ```
+
+**_Output_**
 
 ```
 ## [1] ">QPM92673.1 cyclophilin [Procambarus clarkii]"
@@ -455,6 +523,8 @@ head(fastaf)
 
 ### 5) Download the protein corresponding to the known nucleotide UID
 
+**_Input_**
+
 ```r
 lnk1 <- elink(uid = "429843488", dbFrom = "nucleotide", dbTo = "protein")
 protein <- efetch(lnk1, rettype = "fasta", retmode = "text")
@@ -462,6 +532,8 @@ write(content(protein), "prot_from_nt.fa")
 read_protein <- readLines("prot_from_nt.fa")
 head(read_protein)
 ```
+
+**_Output_**
 
 ```
 ## [1] ">AGA16578.1 cyclophilin A [Procambarus clarkii]"
@@ -474,6 +546,8 @@ head(read_protein)
 
 ### 6) Download all sequences from the PMID ... job and write them to a fasta file
 
+**_Input_**
+
 ```r
 ms2 <- esearch(term = "Cyclophilin A AND Open reading frame AND Real-time PCR", db = "pubmed")
 lnk <- elink(ms2[2], dbFrom = "pubmed", dbTo = "nuccore")
@@ -482,6 +556,8 @@ write(content(f2), "py_fasta_pmid_R.fa")
 read_seq <- readLines("py_fasta_pmid_R.fa")
 head(read_seq)
 ```
+
+**_Output_**
 
 ```
 ## [1] ">EU164775.1 Penaeus monodon cyclophilin A mRNA, complete cds"
