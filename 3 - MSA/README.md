@@ -2,21 +2,29 @@
 
 - `phylo-3.ipynb` - contains this whole pipeline done
 
+> For this work, we will use the alignments of [SUP35 gene](https://www.yeastgenome.org/locus/S000002579)
+
 ### 1) Commands to run 6 possible alignment algorithms (`clustalw`, `muscle`, `mafft`, `kalign`, `tcoffee`, `prank`) for 10 DNA sequences.
 
+**_Input_**
+
 ```bash
-time clustalw -INFILE=data/<file_name>.fa -OUTPUT=FASTA -OUTFILE=10_DNA_seqs/<file_name>.clustalw.fa
-time muscle -align data/<file_name>.fa -output 10_DNA_seqs/<file_name>_muscle.fa
-time mafft --auto data/<file_name>.fa >10_DNA_seqs/<file_name>_mafft.fa
-time kalign <data/<file_name>.fa >10_DNA_seqs/<file_name>_kalign.fa
-time t_coffee -infile=data/<file_name>.fa -outfile=10_DNA_seqs/<file_name>_tcoffee.fa -output=fasta_aln
-time prank -d=data/<file_name>.fa -o=10_DNA_seqs/<file_name>_prank.fa -codon
+time clustalw -INFILE=data/SUP35_10seqs.fa -OUTPUT=FASTA -OUTFILE=10_DNA_seqs/02_SUP35_10seqs.clustalw.fa
+time muscle -align data/SUP35_10seqs.fa -output 10_DNA_seqs/02_SUP35_10seqs_muscle.fa
+time mafft --auto data/SUP35_10seqs.fa >10_DNA_seqs/02_SUP35_10seqs_mafft.fa
+time kalign <data/SUP35_10seqs.fa >10_DNA_seqs/02_SUP35_10seqs_kalign.fa
+time t_coffee -infile=data/SUP35_10seqs.fa -outfile=10_DNA_seqs/02_SUP35_10seqs_tcoffee.fa -output=fasta_aln
+time prank -d=data/SUP35_10seqs.fa -o=10_DNA_seqs/02_SUP35_10seqs_prank.fa -codon
 ```
+
+**_Input_**
 
 ```python
 from Bio import AlignIO
 import os
 ```
+
+**_Input_**
 
 ```python
 folder_path = '10_DNA_seqs'
@@ -27,6 +35,8 @@ for file in alignment_files:
     alignment_length = alignment.get_alignment_length()
     print(f"Alignment length in file {file}: {alignment_length}")
 ```
+
+**_Output_**
 
 ```
 Alignment length in file 10_DNA_seqs/02_SUP35_10seqs_tcoffee.fa: 2210
@@ -74,14 +84,18 @@ It's beautiful!
 
 ### 4) Commands to run 6 possible alignments for 250 DNA sequences.
 
+**_Input_**
+
 ```bash
-time clustalw -INFILE=data/<file_name>.fa -OUTPUT=FASTA -OUTFILE=250_DNA_seqs/<file_name>.clustalw.fa
-time muscle -align data/<file_name>.fa -output 250_DNA_seqs/<file_name>_muscle.fa
-time mafft --auto data/<file_name>.fa >250_DNA_seqs/<file_name>_mafft.fa
-time kalign <data/<file_name>.fa >250_DNA_seqs/<file_name>_kalign.fa
-time t_coffee -infile=data/<file_name>.fa -outfile=250_DNA_seqs/<file_name>_tcoffee.fa -output=fasta_aln
-time prank -d=data/<file_name>.fa -o=250_DNA_seqs/<file_name>_prank.fa -codon
+time clustalw -INFILE=data/SUP35_250seqs.fa -OUTPUT=FASTA -OUTFILE=250_DNA_seqs/05_SUP35_250seqs.clustalw.fa
+time muscle -align data/SUP35_250seqs.fa -output 250_DNA_seqs/05_SUP35_250seqs_muscle.fa
+time mafft --auto data/SUP35_250seqs.fa >250_DNA_seqs/05_SUP35_250seqs_mafft.fa
+time kalign <data/SUP35_250seqs.fa >250_DNA_seqs/05_SUP35_250seqs_kalign.fa
+time t_coffee -infile=data/SUP35_250seqs.fa -outfile=250_DNA_seqs/05_SUP35_250seqs_tcoffee.fa -output=fasta_aln
+time prank -d=data/SUP35_250seqs.fa -o=250_DNA_seqs/05_SUP35_250seqs_prank.fa -codon
 ```
+
+**_Input_**
 
 ```python
 folder_path = '250_DNA_seqs'
@@ -92,6 +106,8 @@ for file in alignment_files:
     alignment_length = alignment.get_alignment_length()
     print(f"Alignment length in file {file}: {alignment_length}")
 ```
+
+**_Output_**
 
 ```
 Alignment length in file 250_DNA_seqs/05_SUP35_250seqs.clustalw.fa: 2179
@@ -121,6 +137,8 @@ But to be fair, `mafft` is not bad either. Its alignment is longer, and its work
 
 The simplest and fastest variant. With its help, we "stupidly" do the translation starting from the first nucleotide and up to the last one.
 
+**_Input_**
+
 ```bash
 transeq -sequence data/<file_name>.fa -outseq data/<file_name>.t.faa
 ```
@@ -133,21 +151,27 @@ Anything that starts with a methionine and ends with a stop codon is an open rea
 It needs to tune our representation, otherwise we get a bunch of junk. Especially in fairly long sequences.
 But if we know how long this junk should be and we need to predict proteins quickly from our data of some Sanger sequencing, it is a very good option!
 
+**_Input_**
+
 ```bash
 getorf -sequence data/<file_name>.fa -outseq data/<file_name>.g.faa -noreverse -minsize 500
 ```
 
 ### 7) Commands to run 6 possible alignment variants for 10 protein sequences.
 
+**_Input_**
+
 ```bash
-time clustalw -INFILE=data/<file_name>.g.faa -OUTFILE=10_protein_seqs/<file_name>.clustalw.faa -OUTPUT=FASTA -TYPE=protein
-time clustalo --infile=data/<file_name>.g.faa --outfile=10_protein_seqs/<file_name>.clustalo.faa --verbose
-time muscle -align data/<file_name>.g.faa -output 10_protein_seqs/<file_name>_muscle.faa
-time mafft --auto data/<file_name>.g.faa >10_protein_seqs/<file_name>_mafft.fa
-time kalign <data/<file_name>.g.faa >10_protein_seqs/<file_name>_kalign.faa
-time t_coffee -infile=data/<file_name>.g.faa -outfile=10_protein_seqs/<file_name>_tcoffee.faa -output=fasta_aln
-time prank -d=data/<file_name>.g.faa -o=10_protein_seqs/<file_name>_prank.faa
+time clustalw -INFILE=data/SUP35_10seqs.g.faa -OUTFILE=10_protein_seqs/08_SUP35_10seqs.clustalw.faa -OUTPUT=FASTA -TYPE=protein
+time clustalo --infile=data/SUP35_10seqs.g.faa --outfile=10_protein_seqs/08_SUP35_10seqs.clustalo.faa --verbose
+time muscle -align data/SUP35_10seqs.g.faa -output 10_protein_seqs/08_SUP35_10seqs_muscle.faa
+time mafft --auto data/SUP35_10seqs.g.faa >10_protein_seqs/08_SUP35_250seqs_mafft.fa
+time kalign <data/SUP35_10seqs.g.faa >10_protein_seqs/08_SUP35_10seqs_kalign.faa
+time t_coffee -infile=data/SUP35_10seqs.g.faa -outfile=10_protein_seqs/08_SUP35_10seqs_tcoffee.faa -output=fasta_aln
+time prank -d=data/SUP35_10seqs.g.faa -o=10_protein_seqs/08_SUP35_10seqs_prank.faa
 ```
+
+**_Input_**
 
 ```python
 folder_path = '10_protein_seqs'
@@ -158,6 +182,8 @@ for file in alignment_files:
     alignment_length = alignment.get_alignment_length()
     print(f"Alignment length in file {file}: {alignment_length}")
 ```
+
+**_Output_**
 
 ```
 Alignment length in file 10_protein_seqs/08_SUP35_250seqs_mafft.fa: 759
@@ -187,6 +213,8 @@ This is where I like `muscle` the best. It worked for less than 1 second and its
 
 ### 9) How to add two more nucleotide sequences to an alignment of 250 nucleotide sequences, previously aligning them, with and `mafft`?
 
+**_Input_**
+
 ```bash
 mafft --auto data/<file_name>.fa > 252_DNA_seqs/<file_name>_mafft.fa
 mafft --add 252_DNA_seqs/<file_name>_mafft.fa 250_DNA_seqs/<file_name>_mafft.fa > 252_DNA_seqs/<file_name>_mafft.fa
@@ -195,11 +223,15 @@ mafft --add 252_DNA_seqs/<file_name>_mafft.fa 250_DNA_seqs/<file_name>_mafft.fa 
 ### 10) Extract from NCBI using any variation of eutils all sequences for the query "Parapallasea 18S" (Parapallasea is a taxon and 18S is a gene) and save to the file fasta.
 > What goes wrong when aligning the sequences in the Parapallasea_18S.fa file and with what parameters can you get the correct answer?
 
+**_Input_**
+
 ```bash
 esearch -db nucleotide -query "Parapallasea 18S" | efetch -format fasta >Parapallasea_18.fa
 ```
 
 **Option 1 - `muscle`**
+
+**_Input_**
 
 ```bash
 muscle -align Parapallasea_18.fa -output Parapallasea_18.fa.muscle.aln
@@ -232,6 +264,8 @@ The end of the gene<br>
 
 **Option 2 - `mafft`**
 
+**_Input_**
+
 ```bash
 mafft --auto Parapallasea_18.fa > Parapallasea_18.fa.mafft.aln
 ```
@@ -240,6 +274,8 @@ mafft --auto Parapallasea_18.fa > Parapallasea_18.fa.mafft.aln
 > Attention: the origin of the sequence is mitochondrial. What is important to consider when searching?
 Extract the sequence with the best match into a separate file.
 
+**_Input_**
+
 ```bash
 makeblastdb -in data/Ommatogammarus_flavus_transcriptome_assembly.fa -dbtype nucl -parse_seqids
 ```
@@ -247,10 +283,14 @@ makeblastdb -in data/Ommatogammarus_flavus_transcriptome_assembly.fa -dbtype nuc
 The gene is mitochondrial<br>
 Accordingly, the genetic code is different, and since here we are dealing with the communication between the protein query and the nucleotide base, it may matter. Not catastrophic here. But it is better to use the `-db_gencode 5` option, because this way the identity will be higher
 
+**_Input_**
+
 ```bash
 tblastn -query data/Acanthogammarus_victorii_COI.faa -db data/Ommatogammarus_flavus_transcriptome_assembly.fa -outfmt 6 -db_gencode 5
 ## fields: qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
 ```
+
+**_Output_**
 
 ```
 Acanthogammarus_victorii_COI	TRINITY_DN8878_c0_g1_i2	89.621	501	52	0	9	509	3	1505	0.0	781
@@ -259,13 +299,19 @@ Acanthogammarus_victorii_COI	TRINITY_DN58613_c0_g1_i1	50.000	20	9	1	206	225	32	8
 
 Percentage of identity is **89.621**! Yay!
 
+**_Input_**
+
 ```bash
 blastdbcmd -db data/Ommatogammarus_flavus_transcriptome_assembly.fa -entry TRINITY_DN8878_c0_g1_i2 -out data/Ommatogammarus_flavus_COI.fa
 ```
 
+**_Input_**
+
 ```bash
 cat data/Ommatogammarus_flavus_COI.fa
 ```
+
+**_Output_**
 
 ```
 >TRINITY_DN8878_c0_g1_i2 len=1505
