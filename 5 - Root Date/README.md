@@ -8,13 +8,19 @@
 
 ### **1) Rooting a tree by a known external clade in `IQ-TREE`**
 
+**_Input_**
+
 ```bash
 iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_ufb -bb 1000
 ```
 
+**_Input_**
+
 ```bash
 iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_ufb_alrt_abayes -bb 1000 -alrt 1000 -abayes
 ```
+
+**_Input_**
 
 ```bash
 iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_root_outgroup -bb 1000 -alrt 1000 -abayes  -o SUP35_Kla_AB039749,SUP35_Agos_ATCC_10895_NM_211584
@@ -22,9 +28,13 @@ iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_root_outgroup -
 
 ### **2) Rooting a tree using `midpoint rooting`**
 
+**_Input_**
+
 ```bash
 ! python3 midpoint_root.py SUP35_TIM3_ufb.treefile >SUP35_TIM3_ufb_midpoint.treefile
 ```
+
+**_Input_**
 
 ```bash
 ! Rscript midpoint_root.R
@@ -32,12 +42,16 @@ iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_root_outgroup -
 
 #### **2.1) Visualisation of the rooted trees from the previous paragraphs**
 
+**_Input_**
+
 ```bash
 ! Rscript draw_tree.R SUP35_TIM3_ufb.treefile SUP35_TIM3_ufb.png
 ! Rscript draw_tree.R SUP35_TIM3_ufb_midpoint.treefile SUP35_TIM3_ufb_midpoint.png
 ! Rscript draw_tree.R SUP35_TIM3_root_outgroup.treefile SUP35_TIM3_root_outgroup.png
 ! Rscript draw_tree.R SUP35_TIM3_ufb_alrt_abayes_rooted.treefile SUP35_TIM3_ufb_alrt_abayes_rooted.png
 ```
+
+**_Output_**
 
 <div style='justify-content: center'>
 <img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/SUP35_TIM3_ufb.png" align='center', width="50%">
@@ -71,15 +85,21 @@ There are more intelligent models for this.<br>
 One of them is the easy-to-apply `non-reversible` model `iq-tree2`.<br>
 The idea is that they allow you to predict where the root was! This, by analogy with `bootstrap` is called `rootstrap`.
 
+**_Input_**
+
 ```bash
 iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_root_auto --model-joint 12.12 -B 1000
 # -B 1000 -  it's not `bootstrap`, it's how many times to run `rootstrap`
 ```
 
+**_Input_**
+
 ```bash
 cat SUP35_TIM3_root_auto.rootstrap.nex
 # - contains information about the algorithm's confidence in where the root is located
 ```
+
+**_Output_**
 
 ```
 #NEXUS
@@ -95,9 +115,13 @@ Programs that read `Newick` format will not be able to read this tree. According
 ### **4) Root-supported tree visualisation (`rootstrap`)**
 > What can we say about the algorithm's confidence in root selection?
 
+**_Input_**
+
 ```bash
 figtree SUP35_TIM3_root_auto.rootstrap.nex
 ```
+
+**_Output_**
 
 <div style='justify-content: center'>
 <img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/5%20-%20Root%20Date/imgs/Screenshot%202024-03-16%20at%2000.24.10.png" align='center', width="50%">
@@ -113,37 +137,55 @@ It can't say anything specific about where the tree splits. There's a 42.4% chan
 > - Draw the final tree (can be in `FigTree`, bonus for `ggtree`)<br>
 > - Be sure to show estimates of the age of the common ancestor at the nodes!<br>
 
+**_Input_**
+
 ```bash
 efetch -db popset -id 126256179 -format fasta >felidae_atp8.fa
 ```
+
+**_Input_**
 
 ```bash
 cut -d ' ' -f 1,2,3 felidae_atp8.fa | sed -e 's/ /_/g' > felidae_atp8.renamed.fa
 ```
 
+**_Input_**
+
 ```bash
 mafft --auto felidae_atp8.renamed.fa >felidae_atp8.aln
 ```
+
+**_Input_**
 
 ```bash
 trimal -in felidae_atp8.aln -out felidae_atp8.trim.fas -nogaps
 ```
 
+**_Input_**
+
 ```bash
 iqtree2 -s felidae_atp8.trim.fas -o EF437591.1_Felis_catus -alrt 1000 -abayes
 ```
+
+**_Input_**
 
 ```python
 from Bio import Phylo
 ```
 
+**_Input_**
+
 ```python
 tree = Phylo.read("felidae_atp8.trim.fas.treefile", "newick")
 ```
 
+**_Input_**
+
 ```python
 Phylo.draw_ascii(tree)
 ```
+
+**_Output_**
 
 ```
                                           , EF437567.1_Neofelis_nebulosa
@@ -216,6 +258,8 @@ Everything is okay.
 </div>
 
 Save everything to `felidae_2percent.xml`.
+
+**_Input_**
 
 ```bash
 beast felidae_2percent.xml
