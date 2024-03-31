@@ -4,6 +4,9 @@
 - scripts - contains all R scripts used in this pipeline
 
 > For this work, we will use the alignment of [SUP35 gene](https://www.yeastgenome.org/locus/S000002579) obtained by `prank` considering codons
+
+**_Input_**
+
 ```bash
 prank -codon -d=SUP35_10seqs.fa -o=SUP35_aln -F
 ```
@@ -16,15 +19,21 @@ _Tree building overview_
 
 ### 1) How to cut bad areas out of the alignment using `trimAl`?
 
+**_Input_**
+
 ```bash
 trimal -in SUP35_aln_prank.best.fas -out SUP35_aln_prank.trim.fas -automated1
 ```
 
 ### 2) How to fit an evolution model in `ModelTest` (`ModelTest-NG`)?
 
+**_Input_**
+
 ```bash
 modeltest-ng -i SUP35_aln_prank.trim.fas -o SUP35_trim_modeltest
 ```
+
+**_Output_**
 
 ```
                      Model         Score        Weight
@@ -40,9 +49,13 @@ In total we see that the `TIM3+G4` is recognised as the best model!
 
 First, let's check that our tree is being built at all
 
+**_Input_**
+
 ```bash
 raxml-ng --check --msa SUP35_aln_prank.trim.fas --model TIM3+G4 --prefix SUP35_raxml_test
 ```
+
+**_Output_**
 
 ```
 Alignment can be successfully read by RAxML-NG.
@@ -50,15 +63,21 @@ Alignment can be successfully read by RAxML-NG.
 
 Great! Let's go!
 
+**_Input_**
+
 ```bash
 raxml-ng --msa SUP35_aln_prank.trim.fas --model TIM3+G4 --prefix SUP35_raxml --threads 2 --seed 222 --outgroup SUP35_Kla_AB039749
 ```
 
 ### 4) Drawing the resulting tree (the best ML tree)
 
+**_Input_**
+
 ```bash
 Rscript draw_tree.R SUP35_raxml.raxml.bestTree SUP35_raxml.png
 ```
+
+**_Output_**
 
 <div style='justify-content: center'>
 <img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/4%20-%20Trees/imgs/SUP35_raxml.png" align='center', width="50%">
@@ -67,10 +86,15 @@ Rscript draw_tree.R SUP35_raxml.raxml.bestTree SUP35_raxml.png
 ### 5) Model selection in ModelFinder (IQ-TREE)
 > Which model of evolution was found to be the most appropriate for our alignment?
 
+**_Input_**
+
 ```bash
 iqtree2 -m MFP -s SUP35_aln_prank.trim.fas --prefix SUP35_MF2
 head -42 SUP35_MF2.iqtree | tail -6
 ```
+
+**_Output_**
+
 ```
 Best-fit model according to BIC: TIM3+F+G4
 
@@ -92,15 +116,21 @@ In general, we got the same thing. Only ModelFinder also threw in information ab
 
 ### 7) Build an ML tree in IQ-TREE using the selected model.
 
+**_Input_**
+
 ```bash
 iqtree2 -m TIM3+F+G4 -s SUP35_aln_prank.trim.fas --prefix SUP35_iqtree
 ```
 
 ### 8) Drawing of the resulting tree (best ML tree)
 
+**_Input_**
+
 ```bash
 Rscript draw_tree.R SUP35_iqtree.treefile SUP35_iqtree.png
 ```
+
+**_Output_**
 
 <div style='justify-content: center'>
 <img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/4%20-%20Trees/imgs/SUP35_iqtree.png" align='center', width="50%">
@@ -112,27 +142,39 @@ They have different views on how well the outer groups diverge, and they have di
 ### 9) Comparison of likelihood (log likelihood) of trees obtained with different models and before and after filtering
 >What conclusion can be drawn from this?
 
+**_Input_**
+
 ```bash
 iqtree2 -s SUP35_aln_prank.best.fas -pre SUP35_iqtree_unfilt
 grep "Log-likelihood" SUP35_iqtree_unfilt.iqtree
 ```
 
+**_Output_**
+
 ```
 Log-likelihood of the tree: -9696.9044 (s.e. 160.3706)
 ```
+
+**_Input_**
 
 ```bash
 grep "Log-likelihood" SUP35_iqtree.iqtree
 ```
 
+**_Output_**
+
 ```
 Log-likelihood of the tree: -8993.1633 (s.e. 149.1347)
 ```
+
+**_Input_**
 
 ```bash
 iqtree2 -s SUP35_aln_prank.best.fas -m JC -pre SUP35_iqtree_JC
 grep "Log-likelihood" SUP35_iqtree_JC.iqtree
 ```
+
+**_Output_**
 
 ```
 Log-likelihood of the tree: -10482.7253 (s.e. 176.1729)
@@ -150,11 +192,15 @@ That said, the topology is the same everywhere! Anyway, if we only need to look 
 
 ### 10) Generation of 100 replicas of a regular bootstrap
 
+**_Input_**
+
 ```bash
 time iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -redo -pre SUP35_TIM3_b -b 100
 ```
 
 ### 11) Generation of 1000 ultrafast bootstrap replicas
+
+**_Input_**
 
 ```bash
 time iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -redo -pre SUP35_TIM3_ufb -bb 1000
@@ -164,6 +210,8 @@ time iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -redo -pre SUP35_TIM3_ufb 
 
 Generating 100 replicas of regular bootstrap took 3:17.00, while generating 1000 replicas of ultrafast bootstrap took 3.258. That's a huge difference!
 
+**_Input_**
+
 ```python
 bootstrap_100 = 3 * 60 + 17
 ultrafast_bootstrap_1000 = 3.258
@@ -171,11 +219,15 @@ ultrafast_bootstrap_1000 = 3.258
 print(f'Generation of ultrafast bootstrap is faster: {bootstrap_100 / ultrafast_bootstrap_1000} times')
 ```
 
+**_Output_**
+
 ```
 Generation of ultrafast bootstrap is faster: 60.46654389195826 times
 ```
 
 ### 13) Running the previous command, but with generation: 1000 ultrafast bootstrap + 1000 alrt + abayes
+
+**_Input_**
 
 ```bash
 iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_B_alrt_abayes -bb 1000 -alrt 1000 -abayes
@@ -183,9 +235,13 @@ iqtree2 -s SUP35_aln_prank.trim.fas -m TIM3+F+G4 -pre SUP35_TIM3_B_alrt_abayes -
 
 ### 14) Drawing the resulting tree with three supports
 
+**_Input_**
+
 ```bash
 Rscript draw_tree_max.R SUP35_TIM3_B_alrt_abayes.treefile SUP35_TIM3_B_alrt_abayes.png
 ```
+
+**_Output_**
 
 <div style='justify-content: center'>
 <img src="https://github.com/iliapopov17/BI-Phylogenetics/blob/main/4%20-%20Trees/imgs/SUP35_TIM3_B_alrt_abayes.png" align='center', width="50%">
